@@ -1,74 +1,85 @@
-# Zee Personalized Recommender System
+# Zee Personalized Movie Recommender System
 
-This repository contains the implementation of a personalized movie recommender system built using collaborative filtering and matrix factorization techniques on the MovieLens dataset. The goal is to provide accurate, user-centric movie recommendations by analyzing user ratings and finding patterns in both item-based and user-based approaches.
+A Python-based project implementing a comprehensive movie recommendation engine using collaborative filtering (item-based and user-based), cosine similarity, Pearson correlation, and matrix factorization. This repository demonstrates end-to-end data handling, exploratory analysis, model building, and evaluation.
 
-## 🚀 Features
+---
 
-* **Data Processing**: Read and clean raw `ratings.dat`, `users.dat`, and `movies.dat` files.
-* **Exploratory Data Analysis**: Statistics on ratings distribution, user demographics, and movie genres.
-* **Item-based Collaborative Filtering**:
+## Table of Contents
 
-  * Pearson Correlation Coefficient
-  * Cosine Similarity
-  * K-Nearest Neighbors (using scikit-learn) for item similarity
-* **User-based Collaborative Filtering** (optional):
+* [Project Overview](#project-overview)
+* [Repository Structure](#repository-structure)
+* [Data Files](#data-files)
+* [Prerequisites](#prerequisites)
+* [Installation](#installation)
+* [Usage](#usage)
+* [Modeling Approach](#modeling-approach)
+* [Evaluation Metrics](#evaluation-metrics)
+* [Questionnaire & Insights](#questionnaire--insights)
+* [Contributing](#contributing)
+* [License](#license)
 
-  * Similarity computation between users
-  * Weighted recommendation based on top-n similar users
-* **Matrix Factorization**:
+---
 
-  * Factorization using the Surprise library
-  * Evaluation with RMSE and MAPE
-  * Embedding visualization (2D and 4D)
+## Project Overview
 
-## 📁 Repository Structure
+This repository contains a full-featured movie recommender system built on the MovieLens dataset. It covers:
 
-```
-Zee-Personalized-Recommender-System/
-│
-├── data/
-│   ├── ratings.dat       # UserID::MovieID::Rating::Timestamp
-│   ├── users.dat         # UserID::Gender::Age::Occupation::Zip-code
-│   └── movies.dat        # MovieID::Title::Genres
-│
-├── notebooks/
-│   ├── 01_data_preparation.ipynb
-│   ├── 02_exploratory_analysis.ipynb
-│   ├── 03_item_based_CF.ipynb
-│   ├── 04_user_based_CF.ipynb        # Optional
-│   ├── 05_matrix_factorization.ipynb
-│   └── 06_embeddings_visualization.ipynb
-│
-├── src/
-│   ├── data_loader.py                # Functions to read & merge data files
-│   ├── preprocessing.py              # Cleaning and feature engineering
-│   ├── cf_item.py                    # Item-based CF (Pearson & Cosine)
-│   ├── cf_user.py                    # User-based CF methods
-│   ├── mf_model.py                   # Matrix factorization implementation
-│   └── utils.py                      # Helper functions
-│
-├── requirements.txt                  # Python dependencies
-├── README.md                         # Project introduction and instructions
-└── LICENSE                           # Open-source license
+* Data ingestion, cleaning, and feature engineering
+* Exploratory data analysis (EDA) and visualizations
+* Item-based collaborative filtering using Pearson correlation and cosine similarity
+* User-based collaborative filtering
+* Matrix factorization via the `Surprise` library
+* Model evaluation (RMSE, MAPE)
+* Embedding visualization
+
+The goal is to deliver personalized movie recommendations for a target user by leveraging ratings from similar users and similar items.
+
+---
+
+## Repository Structure
+
+```text
+.
+├── Business Case_ Zee Recommender Systems Approach.pdf  # Project requirements and approach overview
+├── Details.docx                                      # Additional project details
+├── Zee_Recommender_Systems.ipynb                     # Jupyter notebook with full implementation
+├── zee-movies.dat                                    # Movie metadata (MovieID, Title, Genres)
+├── zee-ratings.dat                                   # User ratings (UserID, MovieID, Rating, Timestamp)
+└── zee-users.dat                                     # User demographics (UserID, Gender, Age, Occupation, Zip-code)
 ```
 
-## 🛠️ Prerequisites
+---
 
-* Python 3.7+
-* pandas
-* numpy
-* scikit-learn
-* scipy
-* matplotlib / seaborn
-* Surprise (for matrix factorization)
+## Data Files
 
-Install dependencies:
+* **`zee-movies.dat`** — contains `MovieID::Title::Genres`
+* **`zee-ratings.dat`** — contains `UserID::MovieID::Rating::Timestamp`
+* **`zee-users.dat`** — contains `UserID::Gender::Age::Occupation::Zip-code`
+
+Each file uses `::` as the delimiter. These are read and merged within the notebook.
+
+---
+
+## Prerequisites
+
+* Python 3.7 or higher
+* Jupyter Notebook
+
+Required Python libraries:
 
 ```bash
-pip install -r requirements.txt
+pandas
+numpy
+scipy
+scikit-learn
+matplotlib
+seaborn
+surprise               # for matrix factorization
 ```
 
-## 🔧 Usage
+---
+
+## Installation
 
 1. **Clone the repository**
 
@@ -79,85 +90,108 @@ git clone [https://github.com/GopalGB/Zee-Personalized-Recommender-System.git](h
 cd Zee-Personalized-Recommender-System
 
 ````
-
-2. **Download and place data**
-   - Obtain `ratings.dat`, `movies.dat`, `users.dat` from the [MovieLens dataset](https://drive.google.com/drive/folders/1RY4RG7rVfY8-0uGeOPWqWzNIuf-iosuv)
-   - Place files into the `data/` directory
-
-3. **Run Jupyter Notebooks**
+2. **Create and activate a virtual environment** (optional but recommended)
    ```bash
-jupyter notebook
+python3 -m venv venv
+source venv/bin/activate   # Linux/Mac
+venv\\Scripts\\activate  # Windows
 ````
 
-* Follow the numbered notebooks in `notebooks/` for step-by-step execution.
+3. **Install dependencies**
 
-4. **Generate recommendations**
+   ```bash
+   ```
 
-   * Use `cf_item.py` to recommend top-5 similar movies for a given title.
-   * Use `mf_model.py` to train matrix factorization and evaluate performance.
+pip install -r requirements.txt
 
-## 📊 Methodology
+````
 
-1. **Data Preparation & EDA**
-
-   * Merge ratings, movies, and users into a single DataFrame
-   * Extract release year from movie titles
-   * Compute rating counts and average ratings per movie
-
-2. **Item-based Collaborative Filtering**
-
-   * Build a user–item pivot table
-   * Compute Pearson correlation and cosine similarity between item vectors
-   * For a target movie, find top-5 neighbors by similarity
-
-3. **User-based Collaborative Filtering** (optional)
-
-   * Prompt new user ratings
-   * Find similar users via Pearson correlation
-   * Aggregate weighted ratings to recommend movies
-
-4. **Matrix Factorization**
-
-   * Use Surprise’s SVD algorithm with latent dimension d=4
-   * Train/test split and evaluate RMSE & MAPE
-   * Extract user and item embeddings
-   * Visualize embeddings for d=2
-
-## 🎯 Evaluation Metrics
-
-* **RMSE** (Root Mean Squared Error)
-* **MAPE** (Mean Absolute Percentage Error)
-
-Record your scores in the notebooks under the Matrix Factorization section.
-
-## 📈 Embeddings Visualization
-
-* Generate and compare 2D projections of item/item and user/user embeddings
-* Analyze clustering patterns relative to genres or demographics
-
-## 📋 Questionnaire & Insights
-
-* Which age group watches the most movies?
-* Top occupations by rating count
-* True/False: Most raters are male
-* Most common movie release decade
-* Movie with maximum ratings
-* Top-3 recommendations for "Liar Liar"
-* CF categories: Item-based vs User-based
-* Similarity ranges: Pearson (–1 to +1), Cosine (0 to 1)
-
-## 🤝 Contributing
-
-Contributions are welcome! Please fork the repo and open a pull request with:
-
-* New similarity algorithms
-* Performance optimizations
-* Additional evaluation metrics
-
-## 📄 License
-
-This project is open-sourced under the MIT License. See [LICENSE](LICENSE) for details.
+> *Note: You can also install each library individually if a `requirements.txt` is not provided.*
 
 ---
 
-Happy recommending!
+## Usage
+
+Open and run the notebook to reproduce the analysis and model building steps:
+
+```bash
+jupyter notebook Zee_Recommender_Systems.ipynb
+````
+
+Key sections in the notebook:
+
+1. **Data Loading & Merging** — read `.dat` files, parse, and merge into a single DataFrame.
+2. **Exploratory Data Analysis** — summary statistics, rating distributions, average ratings by genre.
+3. **Feature Engineering** — extract release year, compute number of ratings per movie/user.
+4. **Collaborative Filtering**
+
+   * *Item-based:* Pearson correlation, cosine similarity, KNN
+   * *User-based:* Pearson correlation scoring for new user ratings
+5. **Matrix Factorization** — train and evaluate SVD model using `surprise`.
+6. **Embedding Visualization** — plot 2D embeddings of movies and users.
+
+---
+
+## Modeling Approach
+
+1. **Item-based Collaborative Filtering**
+
+   * Construct movie-user pivot table
+   * Compute pairwise item similarity via Pearson correlation
+   * Recommend top 5 similar movies for a given title
+2. **Cosine Similarity & KNN**
+
+   * Generate item and user similarity matrices
+   * Use `scikit-learn`’s `NearestNeighbors` for fast lookups
+3. **Matrix Factorization**
+
+   * Apply SVD (d=4 latent factors) with the `surprise` library
+   * Train/test split and cross-validation
+   * Tune hyperparameters and record RMSE/MAPE
+4. **User-based Collaborative Filtering (Optional)**
+
+   * Prompt for new user ratings
+   * Identify top-K similar users via Pearson correlation
+   * Aggregate weighted ratings to recommend top 10 movies
+
+---
+
+## Evaluation Metrics
+
+* **Root Mean Squared Error (RMSE)** — measures prediction accuracy
+* **Mean Absolute Percentage Error (MAPE)** — percentage-based error metric
+
+Results and plots are available in the notebook under the "Model Evaluation" section.
+
+---
+
+## Questionnaire & Insights
+
+The notebook also answers these questions:
+
+1. **Age group** with the most ratings
+2. **Profession** with the highest engagement
+3. **Gender distribution** among raters
+4. **Decade** with the most movie releases
+5. **Top-rated movies** and most-rated movie
+6. **Similar movies** to ‘Liar Liar’ (item-based)
+7. **CF classification**: user-based vs. item-based
+8. **Similarity ranges**: Pearson (\[−1, +1]) vs. Cosine (\[0, 1])
+9. **Matrix factorization performance** (RMSE & MAPE)
+10. **Sparse matrix representation example**
+
+---
+
+## Contributing
+
+Contributions are welcome! Please open issues or submit pull requests for bug fixes, enhancements, or new features.
+
+---
+
+## License
+
+This project is released under the MIT License. See [LICENSE](LICENSE) for details.
+
+---
+
+*Happy recommending!*
